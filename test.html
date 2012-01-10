@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Javascript playground</title>
+    <script>
+        var b = document.documentElement;
+        if (!b.className.match(/.*js-enabled.*/)) {
+            b.className = (b.className === '') ? 'js-enabled' : b.className + ' js-enabled';
+        }
+    </script>
+</head>
+<body>
+<div id="container">
+
+</div>
+<script>
+    (function(w, d) {
+        var el,
+            newEl;
+        newEl = document.createElement('a');
+        newEl.setAttribute('href', 'http://www.google.com');
+        newEl.innerHTML = 'link';
+
+        el = d.getElementById('container');
+        el.appendChild(newEl);
+    }(window, document));
+</script>
+</body>
+</html>
