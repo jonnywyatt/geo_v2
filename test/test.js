@@ -1,5 +1,5 @@
 
-describe("Model tests", function () {
+describe("geoApp tests", function () {
     
     beforeEach(function () {
         geoApp.init();
@@ -9,7 +9,7 @@ describe("Model tests", function () {
         geoApp.destroy();
     });
 
-    describe("_getLocation method", function () {
+    describe("Model._getLocation method", function () {
 
         it("returns a location object", function () {
             var callback = jasmine.createSpy("getLocation");
@@ -21,7 +21,7 @@ describe("Model tests", function () {
         });
     });
 
-    describe("_userChange method", function () {
+    describe("Model._userChange method", function () {
 
         var data;
 
@@ -45,7 +45,7 @@ describe("Model tests", function () {
         });
     });
 
-    describe("_initWebsocket method", function () {
+    describe("Model._initWebsocket method", function () {
 
         it("returns false if not passed a string for url", function () {
             var result = geoApp.model._initWebsocket(null, function () {});
@@ -62,6 +62,23 @@ describe("Model tests", function () {
             expect(result).toBe(true);
         });
         
+    });
+
+    describe("View.userChanged method", function () {
+
+        xit("returns false if a user id argument not supplied", function () {
+            var result = geoApp.view.userChanged(null, {});
+            expect(result).toBe(false);
+        });
+        xit("returns false if a data object argument not supplied", function () {
+            var result = geoApp.view.userChanged('jonnywyatt@yahoo.co.uk', null);
+            expect(result).toBe(false);
+        });
+        xit("initialises the map if not already done", function () {
+            expect(geoApp.view.map).toBeNull();
+            geoApp.view.userChanged('jonnywyatt@yahoo.co.uk', {});
+            expect(typeof geoApp.view.map).toBe("object");
+        });
     });
 
 });

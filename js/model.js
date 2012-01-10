@@ -15,6 +15,10 @@ geoApp.Model = function () {
     this._setupRemoteUsers();
 };
 
+/**
+ * @method _setupThisUser
+ * @returns {void}
+ */
 geoApp.Model.prototype._setupThisUser = function () {
     var that = this;
 
@@ -35,12 +39,22 @@ geoApp.Model.prototype._setupThisUser = function () {
     });
 };
 
-geoApp.Model.prototype._publishUserChanged = function (id, data) {
+/**
+ * @method _publishUserChanged
+ * @param {string} userId
+ * @param {object} data
+ * @returns {void}
+ */
+geoApp.Model.prototype._publishUserChanged = function (userId, data) {
     if (geoApp.mediator) {
-        geoApp.mediator.publish('userChanged', id, data);
+        geoApp.mediator.publish('userChanged', userId, data);
     }
 };
 
+/**
+ * @method _setupRemoteUsers
+ * @returns {void}
+ */
 geoApp.Model.prototype._setupRemoteUsers = function () {
     this._initWebsocket('ws://jw-geoapp.appspot.com/users:8080', this._userChange);
 };

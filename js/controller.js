@@ -3,11 +3,12 @@ var geoApp = geoApp || {};
 geoApp.init = function () {
     
     geoApp.model = new geoApp.Model();
-
+    geoApp.view = new geoApp.View('con-map');
+    
     geoApp.mediator = {
-        subscribe: function(channel, fn){
+        subscribe: function(channel, fn, context){
             if (!geoApp.mediator.channels[channel]) geoApp.mediator.channels[channel] = [];
-            geoApp.mediator.channels[channel].push({ context: this, callback: fn });
+            geoApp.mediator.channels[channel].push({ context: context, callback: fn });
             return this;
         },
 
@@ -24,6 +25,7 @@ geoApp.init = function () {
         channels: {}
 
     };
+    //TODO - add window unload to invoke geoApp.destroy
 };
 
 geoApp.destroy = function () {
