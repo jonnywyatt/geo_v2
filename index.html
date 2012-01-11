@@ -3,8 +3,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Geolocator</title>
+        <script>
+            var b = document.documentElement;
+            if (!b.className.match(/.*js-enabled.*/)) {
+                b.className = (b.className === '') ? 'js-enabled' : b.className + ' js-enabled';
+            }
+        </script>
 		<link rel="stylesheet" href="css/main.css">
-		
 	</head>
 	<body>
 		<div id="con-main">
