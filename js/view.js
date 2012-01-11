@@ -7,42 +7,83 @@
  */
 var geoApp = geoApp || {};
 
-geoApp.View = function (id) {
-    this.container = document.getElementById(id);
+/**
+ * @constructor
+ * @param {string} containerId
+ */
+geoApp.View = function (containerId) {
+    this.container = document.getElementById(containerId);
     this.map = null;
     this.markers = {};
     if (geoApp.mediator) {
-        geoApp.mediator.subscribe('userChanged', this.userChanged);
+        geoApp.mediator.subscribe('userChanged', this.userChanged, this);
     }
 };
 
-geoApp.View.prototype.userChanged = function (id, data) {
+
+/**
+ * @method userChanged
+ * @param {string} userId
+ * @param {object} data
+ * @returns {boolean}
+ */
+geoApp.View.prototype.userChanged = function (userId, data) {
     var lat,
-        lon;
+        lon,
+        loc,
+        result = false;
 
-    // check for args
-    // get lat and lon from data. If not valid, exit
-    // if map not initialised, do so and pass it lat / lon. Otherwise update user pos on map and store new marker
+    if (userId && data && data.loc) {
 
-    if (!this.map) {
-        this.initMap(lat, lon);
-    } else {
-        this.map.setCenter(new google.maps.LatLng(lat, lon));
+        lat = data.loc.latitude;
+        lon = data.loc.longitude;
+
+        // if map not initialised, do so and pass it lat / lon. Otherwise update user pos on map and store new marker
+        if (!this.map) {
+            result = this._initMap(lat, lon);
+        } else {
+            loc = this._createMapLocation(lat, lon);
+            if (loc) {
+                this._centerMap(loc);
+                result = true;
+            }
+        }
     }
 
+    return result;
 };
 
-geoApp.View.updateMarker = function (lat, lon) {
+/**
+ * @method _centerMap
+ * @param {object} loc
+ */
+geoApp.View.prototype._centerMap = function (loc) {
+    this.map.setCenter(loc);
+};
+
+/**
+ * @method _createMapLocation
+ * @param lat
+ * @param lon
+ */
+geoApp.View.prototype._createMapLocation = function (lat, lon) {
+    if (!lat || !lon || !google || !google.maps || !google.maps.LatLng) {
+        return null;
+    }
+    return new google.maps.LatLng(lat, lon);
+};
+
+geoApp.View._updateMarker = function (lat, lon) {
     this.markers[id] = new google.maps.Marker({
-        position: new google.maps.LatLng(lat, lon),
+        position: this.createMapLocation(lat, lon),
         map: this.map
     });
 };
 
-geoApp.View.prototype.initMap = function(lat, lon) {
+geoApp.View.prototype._initMap = function(lat, lon) {
     var myOptions = {
         zoom: 15,
-        center: new google.maps.LatLng(lat, lon),
+        center: this.createMapLocation(lat, lon),
         streetViewControl:true,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         navigationControl: true,
@@ -51,4 +92,5 @@ geoApp.View.prototype.initMap = function(lat, lon) {
         }
     };
     this.map = new google.maps.Map(this.container, myOptions);
+    return (this.map !== null);
 };

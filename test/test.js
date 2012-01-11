@@ -81,4 +81,22 @@ describe("geoApp tests", function () {
         });
     });
 
+    describe("View.createMapLocation method", function () {
+        
+        beforeEach(function() {
+           geoApp.View.prototype.createMapLocation = function () {
+               return {
+                   P: {
+                       Pa: 50.555,
+                       Qa: 10.3499
+                   }
+               }
+           };
+        });
+
+        it("returns false if a user id argument not supplied", function () {
+            var result = geoApp.view.userChanged(null, {});
+            expect(result).toBe(false);
+        });
+    });
 });
